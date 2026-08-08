@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 18% 5%;
+    --foreground: 210 20% 92%;
+    --card: 220 18% 8%;
+    --card-foreground: 210 20% 92%;
+    --popover: 220 18% 8%;
+    --popover-foreground: 210 20% 92%;
+    --primary: 210 20% 92%;
+    --primary-foreground: 220 18% 5%;
+    --secondary: 220 10% 18%;
+    --secondary-foreground: 210 20% 92%;
+    --muted: 220 10% 18%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 220 10% 18%;
+    --accent-foreground: 210 20% 92%;
+    --destructive: 0 65% 45%;
+    --destructive-foreground: 210 20% 92%;
+    --border: 220 12% 18%;
+    --input: 220 12% 18%;
+    --ring: 0 84% 60%;
+    --accent-highlight: 0 84% 60%;
+    --radius: 0.4rem;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
