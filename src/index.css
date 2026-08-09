@@ -54,28 +54,7 @@
 /* ── UAC Storefront Utilities ── */
 
 @layer components {
-  /* Hazard stripes — used on hero edge, section dividers */
-  .hazard-stripe {
-    background: repeating-linear-gradient(
-      -45deg,
-      hsl(var(--uac-maroon)),
-      hsl(var(--uac-maroon)) 8px,
-      hsl(var(--uac-gold-dim)) 8px,
-      hsl(var(--uac-gold-dim)) 10px
-    );
-  }
-
-  .hazard-stripe-thin {
-    background: repeating-linear-gradient(
-      -45deg,
-      hsl(var(--uac-maroon)),
-      hsl(var(--uac-maroon)) 4px,
-      hsl(var(--uac-gold-dim)) 4px,
-      hsl(var(--uac-gold-dim)) 5px
-    );
-  }
-
-  /* Storefront section header with hazard accent */
+  /* Storefront section header with red accent */
   .storefront-section-title {
     @apply font-sans text-lg tracking-widest uppercase;
     @apply flex items-center gap-3 mb-5;
@@ -83,15 +62,9 @@
   .storefront-section-title::before {
     content: '';
     display: inline-block;
-    width: 4px;
+    width: 3px;
     height: 1.1em;
-    background: repeating-linear-gradient(
-      -45deg,
-      hsl(var(--uac-maroon)),
-      hsl(var(--uac-maroon)) 3px,
-      hsl(var(--uac-gold-dim)) 3px,
-      hsl(var(--uac-gold-dim)) 4px
-    );
+    background: hsl(var(--accent-highlight));
     border-radius: 1px;
   }
 
@@ -110,14 +83,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 3px;
-    background: repeating-linear-gradient(
-      -45deg,
-      hsl(var(--uac-maroon)),
-      hsl(var(--uac-maroon)) 6px,
-      hsl(var(--uac-gold-dim)) 6px,
-      hsl(var(--uac-gold-dim)) 8px
-    );
+    height: 2px;
+    background: hsl(var(--accent-highlight));
   }
 
   /* ── Mod card grid tile ── */
@@ -197,13 +164,7 @@
     content: '';
     display: block;
     height: 2px;
-    background: repeating-linear-gradient(
-      -45deg,
-      hsl(var(--uac-maroon)),
-      hsl(var(--uac-maroon)) 5px,
-      hsl(var(--uac-gold-dim)) 5px,
-      hsl(var(--uac-gold-dim)) 6px
-    );
+    background: hsl(var(--accent-highlight));
   }
 
   /* ── Section divider ── */
