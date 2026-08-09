@@ -22,7 +22,7 @@ export function HomePage() {
   return (
     <div className="space-y-0">
       {/* ── Featured Hero ── */}
-      {!embedded && hasFeatured && (
+      {hasFeatured && (
         <section className="hero-container px-4 py-12 sm:py-16">
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 items-center">
             {/* Hero artwork */}
