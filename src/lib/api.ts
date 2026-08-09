@@ -20,7 +20,9 @@ export async function apiGet<T>(path: string, params?: Record<string, string>): 
 
 export function isEmbedded(): boolean {
   if (typeof window === 'undefined') return false
-  return new URLSearchParams(window.location.search).has('embedded')
+  if (new URLSearchParams(window.location.search).has('embedded')) return true
+  if (typeof navigator !== 'undefined' && /\bElectron\b/.test(navigator.userAgent)) return true
+  return false
 }
 
 // ---- Install handoff ----
