@@ -166,6 +166,9 @@ export function ProtocolDetailComponent() {
                   {mod.version && (
                     <span className="text-[10px] text-muted-foreground ml-2">v{mod.version}</span>
                   )}
+                  {mod.author && (
+                    <span className="text-[10px] text-muted-foreground ml-2">by {mod.author}</span>
+                  )}
                   {mod.mod_hash && (
                     <code className="text-[10px] text-muted-foreground ml-2">{mod.mod_hash.slice(0, 8)}</code>
                   )}

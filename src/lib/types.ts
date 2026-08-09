@@ -51,6 +51,7 @@ export interface ProtocolMod {
   display_name: string
   download_url: string
   version: string | null
+  author: string | null
   sort_order: number
 }
 
