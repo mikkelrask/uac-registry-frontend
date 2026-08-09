@@ -50,6 +50,7 @@ export interface ProtocolMod {
   mod_hash: string | null
   display_name: string
   download_url: string
+  version: string | null
   sort_order: number
 }
 
@@ -78,6 +79,7 @@ export interface Protocol {
   author: string | null
   protocol_json: string
   thumbnail_url: string | null
+  youtube_video_id: string | null
   created_at: number
   updated_at: number
 }

@@ -86,19 +86,27 @@ export function ProtocolDetailComponent() {
         <p className="text-sm text-muted-foreground max-w-prose leading-relaxed">{data.description}</p>
       )}
 
+      {data.youtube_video_id && (
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${data.youtube_video_id}`}
+          title="Protocol video"
+          allowFullScreen
+          className="w-full aspect-video border border-border bg-black"
+        />
+      )}
+
       {/* Ports & IWADs */}
       <div className="flex flex-wrap gap-4">
         {data.iwads.length > 0 && (
           <div>
             <h3 className="text-xs font-sans uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1">
               <Globe className="size-3.5" />
-              IWADs
+              Supported IWADs
             </h3>
             <div className="flex flex-wrap gap-1.5">
               {data.iwads.map((w) => (
                 <Badge key={w.id} variant={w.is_required ? 'default' : 'secondary'} className="text-[10px]">
                   {w.iwad}
-                  {w.is_required ? '' : ' (optional)'}
                 </Badge>
               ))}
             </div>
@@ -108,13 +116,12 @@ export function ProtocolDetailComponent() {
           <div>
             <h3 className="text-xs font-sans uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1">
               <Monitor className="size-3.5" />
-              Source Ports
+              Supported Source Ports
             </h3>
             <div className="flex flex-wrap gap-1.5">
               {data.ports.map((p) => (
                 <Badge key={p.id} variant={p.is_required ? 'default' : 'secondary'} className="text-[10px]">
                   {p.source_port}
-                  {p.is_required ? '' : ' (optional)'}
                 </Badge>
               ))}
             </div>
@@ -156,6 +163,9 @@ export function ProtocolDetailComponent() {
               >
                 <div className="min-w-0 flex-1">
                   <span className="font-sans text-sm">{mod.display_name}</span>
+                  {mod.version && (
+                    <span className="text-[10px] text-muted-foreground ml-2">v{mod.version}</span>
+                  )}
                   {mod.mod_hash && (
                     <code className="text-[10px] text-muted-foreground ml-2">{mod.mod_hash.slice(0, 8)}</code>
                   )}
