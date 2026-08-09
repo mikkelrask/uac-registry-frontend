@@ -10,7 +10,7 @@ export function ModCard({ mod }: { mod: ModEntry }) {
   const domain = mod.domain ?? mod.urls?.[0]?.domain
 
   return (
-    <Link to={`/mods/${mod.family_name}`} className="block group">
+    <Link to={`/mods/${mod.family_id ?? mod.family_name}`} className="block group">
       <Card className="h-full hover:translate-y-[-2px] transition-transform">
         <CardHeader>
           <div className="flex items-start justify-between gap-2">

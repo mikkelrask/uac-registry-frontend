@@ -49,6 +49,7 @@ export function ModsPage() {
               mod={{
                 hash: fam.id,
                 family_name: fam.name,
+                family_id: fam.id,
                 display_name: fam.name,
                 category: fam.category,
                 is_sidecar: 0,

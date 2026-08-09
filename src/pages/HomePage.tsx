@@ -49,7 +49,7 @@ export function HomePage() {
         ) : families?.length ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {families.slice(0, 6).map((fam) => (
-              <Link key={fam.id} to={`/mods/${fam.name}`} className="block group">
+              <Link key={fam.id} to={`/mods/${fam.id}`} className="block group">
                 <div className="border border-border bg-card/50 p-4 hover:border-accent-highlight/35 hover:translate-y-[-2px] transition-all">
                   <h3 className="font-sans text-sm group-hover:text-accent-highlight transition-colors truncate">
                     {fam.name}

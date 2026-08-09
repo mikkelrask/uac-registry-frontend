@@ -3,6 +3,7 @@
 export interface ModEntry {
   hash: string
   family_name: string
+  family_id?: string
   display_name: string
   category: string | null
   version: string | null
