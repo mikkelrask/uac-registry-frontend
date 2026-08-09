@@ -2,7 +2,6 @@ import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Monitor, Globe, Tag, User, Calendar, Download, Package } from 'lucide-react'
 import { useProtocolDetail } from '@/hooks/useRegistryAPI'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatDate } from '@/lib/utils'
@@ -15,7 +14,7 @@ export function ProtocolDetailComponent() {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-4">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-60 w-full" />
         <Skeleton className="h-20 w-full" />
@@ -25,25 +24,30 @@ export function ProtocolDetailComponent() {
 
   if (error || !data) {
     return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">Protocol not found.</p>
-        <Link to="/protocols" className="text-accent-highlight hover:underline text-sm mt-2 inline-block">
-          &larr; Back to protocols
-        </Link>
+      <div className="max-w-7xl mx-auto px-4 py-8 text-center">
+        <div className="py-16 border border-border bg-card/30">
+          <p className="text-muted-foreground">Protocol not found.</p>
+          <Link to="/protocols" className="text-accent-highlight hover:underline text-sm mt-2 inline-block">
+            &larr; Back to protocols
+          </Link>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <Link to="/protocols" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+      <Link to="/protocols" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors font-sans tracking-wide">
         <ArrowLeft className="size-3.5" />
         Back to protocols
       </Link>
 
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-sans tracking-wide">{data.title}</h1>
+          <h1 className="font-sans text-2xl tracking-wide flex items-center gap-3">
+            <span className="inline-block w-1 h-[1.1em] bg-accent-highlight rounded-sm" />
+            {data.title}
+          </h1>
           <div className="flex flex-wrap gap-3 mt-3 items-center">
             {data.author && (
               <span className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -61,27 +65,25 @@ export function ProtocolDetailComponent() {
             </span>
           </div>
         </div>
-        <Button
-          variant="uac"
-          size="lg"
+        <button
           onClick={() => installProtocol(data.protocol_json)}
-          className="shrink-0"
+          className="hero-cta shrink-0"
         >
           <Download className="size-4" />
           Install Protocol
-        </Button>
+        </button>
       </div>
 
-      {data.thumbnail_url && (
+      {data.thumbnail_url && data.thumbnail_url !== 'None' && (
         <img
           src={data.thumbnail_url}
           alt={data.title}
-          className="w-full max-h-64 object-cover border border-border"
+          className="w-full max-h-72 object-cover border border-border"
         />
       )}
 
       {data.description && (
-        <p className="text-sm text-muted-foreground max-w-prose">{data.description}</p>
+        <p className="text-sm text-muted-foreground max-w-prose leading-relaxed">{data.description}</p>
       )}
 
       {/* Ports & IWADs */}
@@ -120,7 +122,6 @@ export function ProtocolDetailComponent() {
         )}
       </div>
 
-      {/* Tags */}
       {data.tags.length > 0 && (
         <div>
           <h3 className="text-xs font-sans uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-1">
@@ -139,9 +140,9 @@ export function ProtocolDetailComponent() {
 
       <Separator />
 
-      {/* Mods list */}
       <div>
-        <h2 className="font-sans text-lg tracking-wide mb-4">
+        <h2 className="storefront-section-title mb-4">
+          <Package className="size-5 text-accent-highlight" />
           Mods ({data.mods.length})
         </h2>
         {data.mods.length === 0 ? (
@@ -151,7 +152,7 @@ export function ProtocolDetailComponent() {
             {data.mods.map((mod: ProtocolMod) => (
               <div
                 key={mod.id}
-                className="flex items-center justify-between p-3 border border-border bg-card/50"
+                className="flex items-center justify-between p-3 border border-border bg-card/50 hover:border-accent-highlight/30 transition-colors"
               >
                 <div className="min-w-0 flex-1">
                   <span className="font-sans text-sm">{mod.display_name}</span>

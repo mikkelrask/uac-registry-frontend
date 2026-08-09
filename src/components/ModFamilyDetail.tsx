@@ -13,7 +13,7 @@ export function ModFamilyDetail() {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-4">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-40 w-full" />
         <Skeleton className="h-20 w-full" />
@@ -23,11 +23,13 @@ export function ModFamilyDetail() {
 
   if (error || !data) {
     return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">Family not found.</p>
-        <Link to="/mods" className="text-accent-highlight hover:underline text-sm mt-2 inline-block">
-          &larr; Back to mods
-        </Link>
+      <div className="max-w-7xl mx-auto px-4 py-8 text-center">
+        <div className="py-16 border border-border bg-card/30">
+          <p className="text-muted-foreground">Family not found.</p>
+          <Link to="/mods" className="text-accent-highlight hover:underline text-sm mt-2 inline-block">
+            &larr; Back to mods
+          </Link>
+        </div>
       </div>
     )
   }
@@ -36,14 +38,17 @@ export function ModFamilyDetail() {
   const mods = data.versions
 
   return (
-    <div className="space-y-6">
-      <Link to="/mods" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+      <Link to="/mods" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors font-sans tracking-wide">
         <ArrowLeft className="size-3.5" />
         Back to mods
       </Link>
 
       <div>
-        <h1 className="text-2xl font-sans tracking-wide">{family.name}</h1>
+        <h1 className="font-sans text-2xl tracking-wide flex items-center gap-3">
+          <span className="inline-block w-1 h-[1.1em] bg-accent-highlight rounded-sm" />
+          {family.name}
+        </h1>
         <div className="flex flex-wrap gap-3 mt-3 items-center">
           {family.category && <CategoryBadge category={family.category} />}
           {family.author && (
@@ -73,16 +78,16 @@ export function ModFamilyDetail() {
         </div>
       </div>
 
-      {family.thumbnail_url && (
+      {family.thumbnail_url && family.thumbnail_url !== 'None' && (
         <img
           src={family.thumbnail_url}
           alt={family.name}
-          className="w-full max-h-64 object-cover border border-border"
+          className="w-full max-h-72 object-cover border border-border"
         />
       )}
 
       {family.description && (
-        <p className="text-sm text-muted-foreground max-w-prose">{family.description}</p>
+        <p className="text-sm text-muted-foreground max-w-prose leading-relaxed">{family.description}</p>
       )}
 
       {family.screenshots?.length ? <ScreenshotGallery screenshots={family.screenshots} /> : null}
@@ -90,7 +95,7 @@ export function ModFamilyDetail() {
       <Separator />
 
       <div>
-        <h2 className="font-sans text-lg tracking-wide mb-4 flex items-center gap-2">
+        <h2 className="storefront-section-title mb-4">
           <Package className="size-5 text-accent-highlight" />
           Versions ({mods.length})
         </h2>

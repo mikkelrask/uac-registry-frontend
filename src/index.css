@@ -26,6 +26,13 @@
     --input: 220 12% 18%;
     --ring: 0 84% 60%;
     --accent-highlight: 0 84% 60%;
+    /* UAC storefront palette */
+    --uac-maroon: 0 65% 22%;
+    --uac-maroon-light: 0 55% 35%;
+    --uac-gold: 42 85% 52%;
+    --uac-gold-dim: 42 60% 35%;
+    --uac-steel: 220 8% 28%;
+    --uac-steel-light: 220 8% 40%;
     --radius: 0.4rem;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -41,5 +48,202 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* ── UAC Storefront Utilities ── */
+
+@layer components {
+  /* Hazard stripes — used on hero edge, section dividers */
+  .hazard-stripe {
+    background: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--uac-maroon)),
+      hsl(var(--uac-maroon)) 8px,
+      hsl(var(--uac-gold-dim)) 8px,
+      hsl(var(--uac-gold-dim)) 10px
+    );
+  }
+
+  .hazard-stripe-thin {
+    background: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--uac-maroon)),
+      hsl(var(--uac-maroon)) 4px,
+      hsl(var(--uac-gold-dim)) 4px,
+      hsl(var(--uac-gold-dim)) 5px
+    );
+  }
+
+  /* Storefront section header with hazard accent */
+  .storefront-section-title {
+    @apply font-sans text-lg tracking-widest uppercase;
+    @apply flex items-center gap-3 mb-5;
+  }
+  .storefront-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1.1em;
+    background: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--uac-maroon)),
+      hsl(var(--uac-maroon)) 3px,
+      hsl(var(--uac-gold-dim)) 3px,
+      hsl(var(--uac-gold-dim)) 4px
+    );
+    border-radius: 1px;
+  }
+
+  /* ── Hero ── */
+  .hero-container {
+    @apply relative overflow-hidden border-b border-border;
+    background:
+      radial-gradient(ellipse at 20% 50%, hsl(var(--uac-maroon) / 0.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, hsl(var(--uac-gold-dim) / 0.1) 0%, transparent 50%),
+      hsl(var(--background));
+  }
+
+  .hero-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--uac-maroon)),
+      hsl(var(--uac-maroon)) 6px,
+      hsl(var(--uac-gold-dim)) 6px,
+      hsl(var(--uac-gold-dim)) 8px
+    );
+  }
+
+  /* ── Mod card grid tile ── */
+  .mod-grid-tile {
+    @apply relative overflow-hidden border border-border bg-card;
+    @apply transition-all duration-200 ease-out;
+    aspect-ratio: 16 / 10;
+  }
+
+  .mod-grid-tile:hover {
+    @apply border-accent-highlight/40;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0 0 0 / 0.5);
+  }
+
+  .mod-grid-tile .tile-overlay {
+    @apply absolute inset-0 flex flex-col justify-end p-3;
+    background: linear-gradient(to top, rgba(0 0 0 / 0.85) 0%, rgba(0 0 0 / 0.35) 50%, transparent 100%);
+  }
+
+  .mod-grid-tile:hover .tile-overlay {
+    background: linear-gradient(to top, rgba(0 0 0 / 0.92) 0%, rgba(0 0 0 / 0.4) 50%, transparent 100%);
+  }
+
+  .mod-grid-tile .tile-actions {
+    @apply opacity-0 transition-opacity duration-150;
+  }
+
+  .mod-grid-tile:hover .tile-actions {
+    @apply opacity-100;
+  }
+
+  /* ── Placeholder art (no thumbnail) ── */
+  .tile-placeholder {
+    @apply flex items-center justify-center text-4xl font-sans tracking-widest uppercase text-white/15;
+  }
+
+  .tile-placeholder-gameplay { background: linear-gradient(135deg, hsl(142 50% 12%), hsl(142 40% 8%)); }
+  .tile-placeholder-maps     { background: linear-gradient(135deg, hsl(217 50% 14%), hsl(217 40% 8%)); }
+  .tile-placeholder-weapons  { background: linear-gradient(135deg, hsl(0 50% 16%), hsl(0 40% 8%)); }
+  .tile-placeholder-monsters { background: linear-gradient(135deg, hsl(271 50% 14%), hsl(271 40% 8%)); }
+  .tile-placeholder-hud      { background: linear-gradient(135deg, hsl(48 50% 12%), hsl(48 40% 8%)); }
+  .tile-placeholder-graphics { background: linear-gradient(135deg, hsl(330 50% 14%), hsl(330 40% 8%)); }
+  .tile-placeholder-sounds   { background: linear-gradient(135deg, hsl(187 50% 12%), hsl(187 40% 8%)); }
+  .tile-placeholder-music    { background: linear-gradient(135deg, hsl(30 50% 12%), hsl(30 40% 8%)); }
+  .tile-placeholder-textures { background: linear-gradient(135deg, hsl(173 50% 12%), hsl(173 40% 8%)); }
+  .tile-placeholder-skins    { background: linear-gradient(135deg, hsl(239 50% 14%), hsl(239 40% 8%)); }
+  .tile-placeholder-tc       { background: linear-gradient(135deg, hsl(36 50% 12%), hsl(36 40% 8%)); }
+  .tile-placeholder-utilities{ background: linear-gradient(135deg, hsl(220 8% 20%), hsl(220 8% 12%)); }
+
+  /* ── Category rail ── */
+  .category-rail {
+    @apply flex gap-3 overflow-x-auto pb-2;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .category-rail::-webkit-scrollbar {
+    height: 4px;
+  }
+  .category-rail::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .category-rail::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 2px;
+  }
+
+  /* ── Storefront header ── */
+  .storefront-header {
+    @apply sticky top-0 z-50;
+    background: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--background) / 0.98) 100%);
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .storefront-header::after {
+    content: '';
+    display: block;
+    height: 2px;
+    background: repeating-linear-gradient(
+      -45deg,
+      hsl(var(--uac-maroon)),
+      hsl(var(--uac-maroon)) 5px,
+      hsl(var(--uac-gold-dim)) 5px,
+      hsl(var(--uac-gold-dim)) 6px
+    );
+  }
+
+  /* ── Section divider ── */
+  .storefront-divider {
+    @apply my-8;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--border)) 20%,
+      hsl(var(--border)) 80%,
+      transparent 100%
+    );
+  }
+
+  /* ── Storefront search input ── */
+  .storefront-search {
+    @apply flex items-center gap-2 bg-card border border-border px-3 py-2;
+    @apply focus-within:border-accent-highlight/50 transition-colors;
+    min-width: 280px;
+  }
+
+  .storefront-search input {
+    @apply bg-transparent border-none outline-none text-sm text-foreground w-full;
+  }
+
+  .storefront-search input::placeholder {
+    @apply text-muted-foreground;
+  }
+
+  /* ── Hero CTA button ── */
+  .hero-cta {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm uppercase tracking-wider;
+    @apply bg-accent-highlight text-white hover:bg-accent-highlight/85 transition-colors;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+
+  .hero-cta-secondary {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 font-sans text-sm uppercase tracking-wider;
+    @apply border border-border text-muted-foreground hover:text-foreground hover:border-muted-foreground/50 transition-colors;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
   }
 }

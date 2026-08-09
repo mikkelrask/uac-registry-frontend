@@ -11,14 +11,14 @@ export function ModsPage() {
   const limit = searchParams.get('limit') || '24'
   const offset = searchParams.get('offset') || '0'
 
-  const { data: mods, isLoading } = useFamilies({ category, limit, offset })
+  const { data: families, isLoading } = useFamilies({ category, limit, offset })
   const { data: categories } = useCategories()
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+      <div className="storefront-section-title">
         <Package className="size-5 text-accent-highlight" />
-        <h1 className="text-2xl font-sans tracking-wide">Mods</h1>
+        Mods
       </div>
 
       {categories && categories.length > 0 && (
@@ -36,32 +36,24 @@ export function ModsPage() {
       )}
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(9)].map((_, i) => (
-            <Skeleton key={i} className="h-36" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {[...Array(8)].map((_, i) => (
+            <Skeleton key={i} className="aspect-[16/10]" />
           ))}
         </div>
-      ) : mods?.length ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mods.map((fam) => (
-            <ModCard
-              key={fam.id}
-              mod={{
-                hash: fam.id,
-                family_name: fam.name,
-                family_id: fam.id,
-                display_name: fam.name,
-                category: fam.category,
-                is_sidecar: 0,
-                version: null,
-              }}
-            />
+      ) : families?.length ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {families.map((fam) => (
+            <ModCard key={fam.id} mod={fam} />
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground text-center py-12">
-          {category ? `No mods found in "${category}".` : 'No mods registered yet.'}
-        </p>
+        <div className="text-center py-16 border border-border bg-card/30">
+          <Package className="size-10 text-muted-foreground/30 mx-auto mb-3" />
+          <p className="text-sm text-muted-foreground">
+            {category ? `No mods found in "${category}".` : 'No mods registered yet.'}
+          </p>
+        </div>
       )}
     </div>
   )

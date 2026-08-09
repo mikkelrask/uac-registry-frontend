@@ -15,10 +15,10 @@ export function ProtocolsPage() {
   const { data: tags } = useTags()
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+      <div className="storefront-section-title">
         <Cpu className="size-5 text-accent-highlight" />
-        <h1 className="text-2xl font-sans tracking-wide">Protocols</h1>
+        Protocols
       </div>
 
       <FilterPanel
@@ -59,9 +59,12 @@ export function ProtocolsPage() {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground text-center py-12">
-          {tag || port || iwad ? 'No protocols match these filters.' : 'No protocols yet.'}
-        </p>
+        <div className="text-center py-16 border border-border bg-card/30">
+          <Cpu className="size-10 text-muted-foreground/30 mx-auto mb-3" />
+          <p className="text-sm text-muted-foreground">
+            {tag || port || iwad ? 'No protocols match these filters.' : 'No protocols yet.'}
+          </p>
+        </div>
       )}
     </div>
   )
