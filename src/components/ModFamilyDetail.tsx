@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink, Calendar, User, Globe as GlobeIcon, Package } from 'lucide-react'
-import { useFamilyDetail, useFamilyScreenshots } from '@/hooks/useRegistryAPI'
+import { useFamilyDetail } from '@/hooks/useRegistryAPI'
 import { CategoryBadge } from '@/components/ui/badge'
 import { ScreenshotGallery } from '@/components/ScreenshotGallery'
 import { formatDate } from '@/lib/utils'
@@ -10,7 +10,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 export function ModFamilyDetail() {
   const { familyName } = useParams<{ familyName: string }>()
   const { data, isLoading, error } = useFamilyDetail(familyName ?? '')
-  const { data: screenshots } = useFamilyScreenshots(familyName ?? '')
 
   if (isLoading) {
     return (
@@ -33,7 +32,8 @@ export function ModFamilyDetail() {
     )
   }
 
-  const { family, mods } = data
+  const family = data
+  const mods = data.versions
 
   return (
     <div className="space-y-6">
@@ -85,7 +85,7 @@ export function ModFamilyDetail() {
         <p className="text-sm text-muted-foreground max-w-prose">{family.description}</p>
       )}
 
-      {screenshots?.length ? <ScreenshotGallery screenshots={screenshots} /> : null}
+      {family.screenshots?.length ? <ScreenshotGallery screenshots={family.screenshots} /> : null}
 
       <Separator />
 

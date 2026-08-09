@@ -15,7 +15,12 @@ import type {
 export function useFamilies(params?: { category?: string; limit?: string; offset?: string }) {
   return useQuery<ModFamily[]>({
     queryKey: ['families', params],
-    queryFn: () => apiGet('/api/families', params),
+    queryFn: async () => {
+      const data = await apiGet<{ families: ModFamily[]; total: number; limit: number; offset: number }>(
+        '/api/families', params,
+      )
+      return data.families
+    },
   })
 }
 
@@ -66,7 +71,18 @@ export function useProtocolDetail(slug: string) {
 export function useSearch(q: string) {
   return useQuery<SearchResult[]>({
     queryKey: ['search', q],
-    queryFn: () => apiGet('/api/search', { q }),
+    queryFn: async () => {
+      const data = await apiGet<{
+        mods: (ModEntry & { type: 'mod' })[]
+        protocols: (Protocol & { type: 'protocol' })[]
+        total_mods: number
+        total_protocols: number
+      }>('/api/search', { q })
+      return [
+        ...data.mods.map((m) => ({ type: 'mod' as const, mod: m })),
+        ...data.protocols.map((p) => ({ type: 'protocol' as const, protocol: p })),
+      ]
+    },
     enabled: q.length > 0,
   })
 }

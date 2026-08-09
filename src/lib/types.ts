@@ -27,10 +27,11 @@ export interface ModFamily {
   mod_count?: number
 }
 
-export interface FamilyDetail {
-  family: ModFamily
-  mods: ModEntry[]
-  screenshots?: Screenshot[]
+// Real API returns a flat object with versions (not mods) and family fields at top level
+export interface FamilyDetail extends ModFamily {
+  is_sidecar: number
+  screenshots: Screenshot[]
+  versions: ModEntry[]
 }
 
 export interface Screenshot {

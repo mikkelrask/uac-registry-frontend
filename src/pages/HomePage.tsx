@@ -4,26 +4,30 @@ import { useFamilies, useProtocols } from '@/hooks/useRegistryAPI'
 import { ProtocolCard } from '@/components/ProtocolCard'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Package, Cpu, ChevronRight } from 'lucide-react'
+import { isEmbedded } from '@/lib/api'
 
 export function HomePage() {
   const { data: families, isLoading: loadingFamilies } = useFamilies({ limit: '6' })
   const { data: protocols, isLoading: loadingProtocols } = useProtocols()
+  const embedded = isEmbedded()
 
   return (
     <div className="space-y-10">
-      {/* Hero */}
-      <section className="text-center py-8">
-        <h1 className="text-3xl sm:text-4xl font-sans tracking-widest uppercase text-accent-highlight">
-          UAC Registry
-        </h1>
-        <p className="mt-3 text-muted-foreground max-w-xl mx-auto text-sm">
-          Community-curated mods and launch protocols for UAC Launch Control.
-          Browse, discover, and install with one click.
-        </p>
-        <div className="mt-6 flex justify-center">
-          <SearchBar />
-        </div>
-      </section>
+      {/* Hero — hidden when embedded in the Electron app */}
+      {!embedded && (
+        <section className="text-center py-8">
+          <h1 className="text-3xl sm:text-4xl font-sans tracking-widest uppercase text-accent-highlight">
+            UAC Registry
+          </h1>
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto text-sm">
+            Community-curated mods and launch protocols for UAC Launch Control.
+            Browse, discover, and install with one click.
+          </p>
+          <div className="mt-6 flex justify-center">
+            <SearchBar />
+          </div>
+        </section>
+      )}
 
       {/* Latest Mods */}
       <section>
