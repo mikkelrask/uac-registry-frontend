@@ -1,6 +1,6 @@
 import type { InstallMessage } from '@/lib/types'
 
-const API_BASE = 'https://db.uac-soft.online'
+const API_BASE = import.meta.env.VITE_API_BASE ?? 'https://db.uac-soft.online'
 
 export async function apiGet<T>(path: string, params?: Record<string, string>): Promise<T> {
   const url = new URL(path, API_BASE)
