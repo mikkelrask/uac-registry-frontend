@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useFamilies, useProtocols, useCategories } from '@/hooks/useRegistryAPI'
 import { ModCard } from '@/components/ModCard'
 import { ProtocolCard } from '@/components/ProtocolCard'
+import { Markdown } from '@/components/Markdown'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Package, Cpu, ChevronLeft, ChevronRight, Download, Monitor } from 'lucide-react'
 import { isEmbedded } from '@/lib/api'
@@ -281,9 +282,13 @@ function HeroProtocolText({ protocol }: { protocol: Protocol }) {
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-sans tracking-wide text-foreground">
         {protocol.title}
       </h1>
-      <p className="text-sm text-muted-foreground max-w-lg leading-relaxed">
-        {protocol.description || 'A curated launch protocol for UAC Launch Control.'}
-      </p>
+      {protocol.description ? (
+        <Markdown className="max-w-lg">{protocol.description}</Markdown>
+      ) : (
+        <p className="text-sm text-muted-foreground max-w-lg leading-relaxed">
+          A curated launch protocol for UAC Launch Control.
+        </p>
+      )}
       <div className="flex items-center gap-3 pt-2">
         <Link to={`/protocols/${protocol.slug}`} className="hero-cta">
           <Download className="size-4" />
@@ -314,9 +319,13 @@ function HeroFamilyText({ family }: { family: ModFamily }) {
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-sans tracking-wide text-foreground">
         {family.name}
       </h1>
-      <p className="text-sm text-muted-foreground max-w-lg leading-relaxed">
-        {family.description || 'A community mod for UAC Launch Control.'}
-      </p>
+      {family.description ? (
+        <Markdown className="max-w-lg">{family.description}</Markdown>
+      ) : (
+        <p className="text-sm text-muted-foreground max-w-lg leading-relaxed">
+          A community mod for UAC Launch Control.
+        </p>
+      )}
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         {family.author && <span>by {family.author}</span>}
         <span>·</span>

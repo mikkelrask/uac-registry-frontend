@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink, Calendar, User, Globe as GlobeIcon, Package } from 'lucide-react'
 import { useFamilyDetail } from '@/hooks/useRegistryAPI'
 import { CategoryBadge } from '@/components/ui/badge'
+import { Markdown } from '@/components/Markdown'
 import { ScreenshotGallery } from '@/components/ScreenshotGallery'
 import { formatDate } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
@@ -87,7 +88,7 @@ export function ModFamilyDetail() {
       )}
 
       {family.description && (
-        <p className="text-sm text-muted-foreground max-w-prose leading-relaxed">{family.description}</p>
+        <Markdown className="max-w-prose">{family.description}</Markdown>
       )}
 
       {family.screenshots?.length ? <ScreenshotGallery screenshots={family.screenshots} /> : null}

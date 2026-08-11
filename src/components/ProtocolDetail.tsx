@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Monitor, Globe, Tag, User, Calendar, Download, Package } from 'lucide-react'
 import { useProtocolDetail } from '@/hooks/useRegistryAPI'
 import { Badge } from '@/components/ui/badge'
+import { Markdown } from '@/components/Markdown'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatDate } from '@/lib/utils'
@@ -83,7 +84,7 @@ export function ProtocolDetailComponent() {
       )}
 
       {data.description && (
-        <p className="text-sm text-muted-foreground max-w-prose leading-relaxed">{data.description}</p>
+        <Markdown className="max-w-prose">{data.description}</Markdown>
       )}
 
       {data.youtube_video_id && (

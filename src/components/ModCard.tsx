@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { Markdown } from '@/components/Markdown'
 import type { ModFamily } from '@/lib/types'
 import { Download, Package } from 'lucide-react'
 
@@ -61,9 +62,13 @@ export function ModCard({ mod }: { mod: ModFamily }) {
           <h3 className="font-sans text-sm tracking-wide text-foreground truncate">
             {name}
           </h3>
-          <p className="text-[11px] text-muted-foreground line-clamp-2 leading-tight">
-            {mod.description || 'No description'}
-          </p>
+          {mod.description ? (
+            <Markdown className="text-[11px] line-clamp-2 leading-tight">{mod.description}</Markdown>
+          ) : (
+            <p className="text-[11px] text-muted-foreground line-clamp-2 leading-tight">
+              No description
+            </p>
+          )}
 
           {/* Meta row: mod count */}
           <div className="flex items-center gap-3 mt-1.5">

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { Markdown } from '@/components/Markdown'
 import type { Protocol } from '@/lib/types'
 import { Cpu, Monitor, Globe, Download } from 'lucide-react'
 
@@ -89,9 +90,13 @@ export function ProtocolCard({ protocol }: { protocol: Protocol }) {
           <h3 className="font-sans text-sm tracking-wide text-foreground truncate">
             {title}
           </h3>
-          <p className="text-[11px] text-muted-foreground line-clamp-2 leading-tight">
-            {protocol.description || 'A curated launch protocol'}
-          </p>
+          {protocol.description ? (
+            <Markdown className="text-[11px] line-clamp-2 leading-tight">{protocol.description}</Markdown>
+          ) : (
+            <p className="text-[11px] text-muted-foreground line-clamp-2 leading-tight">
+              A curated launch protocol
+            </p>
+          )}
 
           {/* Author row */}
           <div className="flex items-center gap-3 mt-1.5">
