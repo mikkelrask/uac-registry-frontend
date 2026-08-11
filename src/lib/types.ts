@@ -81,6 +81,7 @@ export interface Protocol {
   protocol_json: string
   thumbnail_url: string | null
   youtube_video_id: string | null
+  featured: number
   created_at: number
   updated_at: number
 }

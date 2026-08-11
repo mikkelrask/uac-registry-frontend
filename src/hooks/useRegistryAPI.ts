@@ -51,7 +51,7 @@ export function useMods(params?: { q?: string; category?: string; limit?: string
 
 // ---- Protocols ----
 
-export function useProtocols(params?: { tag?: string; port?: string; iwad?: string }) {
+export function useProtocols(params?: { tag?: string; port?: string; iwad?: string; featured?: string }) {
   return useQuery<Protocol[]>({
     queryKey: ['protocols', params],
     queryFn: () => apiGet('/api/protocols', params),

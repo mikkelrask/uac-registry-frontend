@@ -207,4 +207,19 @@
     @apply border border-border text-muted-foreground hover:text-foreground hover:border-muted-foreground/50 transition-colors;
     clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
   }
+
+  /* ── Hero carousel controls ── */
+  .hero-arrow {
+    @apply inline-flex items-center justify-center size-9 border border-border text-muted-foreground transition-colors;
+    @apply hover:text-foreground hover:border-muted-foreground/50;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  }
+
+  .hero-dot {
+    @apply size-2.5 border border-border transition-colors;
+  }
+
+  .hero-dot[data-active='true'] {
+    @apply bg-accent-highlight border-accent-highlight;
+  }
 }
