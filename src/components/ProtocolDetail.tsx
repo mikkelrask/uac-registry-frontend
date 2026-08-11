@@ -160,19 +160,32 @@ export function ProtocolDetailComponent() {
             {data.mods.map((mod: ProtocolMod) => (
               <div
                 key={mod.id}
-                className="flex items-center justify-between p-3 border border-border bg-card/50 hover:border-accent-highlight/30 transition-colors"
+                className="flex items-center justify-between gap-3 p-3 border border-border bg-card/50 hover:border-accent-highlight/30 transition-colors"
               >
                 <div className="min-w-0 flex-1">
-                  <span className="font-sans text-sm">{mod.display_name}</span>
-                  {mod.version && (
-                    <span className="text-[10px] text-muted-foreground ml-2">v{mod.version}</span>
-                  )}
-                  {mod.author && (
-                    <span className="text-[10px] text-muted-foreground ml-2">by {mod.author}</span>
-                  )}
-                  {mod.mod_hash && (
-                    <code className="text-[10px] text-muted-foreground ml-2">{mod.mod_hash.slice(0, 8)}</code>
-                  )}
+                  <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5">
+                    {mod.mod_hash ? (
+                      <Link
+                        to={`/mods/${mod.mod_hash}`}
+                        className="font-sans text-sm hover:text-accent-highlight transition-colors"
+                      >
+                        {mod.display_name}
+                      </Link>
+                    ) : (
+                      <span className="font-sans text-sm">{mod.display_name}</span>
+                    )}
+                    {mod.version && (
+                      <span className="text-xs text-foreground font-semibold">v{mod.version}</span>
+                    )}
+                    {mod.author && (
+                      <span className="text-[10px] text-muted-foreground">by {mod.author}</span>
+                    )}
+                    {mod.mod_hash && (
+                      <code className="text-[10px] text-muted-foreground/60 ml-auto font-mono">
+                        #{mod.mod_hash.slice(0, 8)}
+                      </code>
+                    )}
+                  </div>
                 </div>
                 <a
                   href={mod.download_url}

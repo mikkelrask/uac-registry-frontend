@@ -28,6 +28,20 @@ export interface ModFamily {
   mod_count?: number
 }
 
+// Single registered mod file (from worker /mod/:hash)
+export interface ModFileDetail {
+  family_id: string
+  family_name: string
+  display_name: string | null
+  version: string | null
+  category: string | null
+  is_sidecar: number
+  load_order: Record<string, string>
+  submitted_at: number
+  approved_at: number
+  urls: { url: string; domain: string }[]
+}
+
 // Real API returns a flat object with versions (not mods) and family fields at top level
 export interface FamilyDetail extends ModFamily {
   is_sidecar: number

@@ -4,6 +4,7 @@ import type {
   ModEntry,
   ModFamily,
   FamilyDetail,
+  ModFileDetail,
   Protocol,
   ProtocolDetail,
   Screenshot,
@@ -46,6 +47,14 @@ export function useMods(params?: { q?: string; category?: string; limit?: string
   return useQuery<ModEntry[]>({
     queryKey: ['mods', params],
     queryFn: () => apiGet('/api/mods', params),
+  })
+}
+
+export function useModDetail(hash: string) {
+  return useQuery<ModFileDetail>({
+    queryKey: ['mod', hash],
+    queryFn: () => apiGet(`/mod/${hash}`),
+    enabled: !!hash,
   })
 }
 
