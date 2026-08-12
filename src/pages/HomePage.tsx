@@ -14,13 +14,16 @@ function isProtocolSlide(slide: Protocol | ModFamily): slide is Protocol {
 }
 
 export function HomePage() {
-  const { data: families, isLoading: loadingFamilies } = useFamilies({ limit: '12' })
-  const { data: protocols, isLoading: loadingProtocols } = useProtocols()
+  const { data: familyData, isLoading: loadingFamilies } = useFamilies({ limit: '12' })
+  const { data: protocolData, isLoading: loadingProtocols } = useProtocols()
   const { data: categories } = useCategories()
   // Featured-flagged protocols drive the hero carousel
-  const { data: featuredProtocols, isLoading: loadingFeatured } = useProtocols({ featured: '1' })
+  const { data: featuredData, isLoading: loadingFeatured } = useProtocols({ featured: '1' })
   // Bigger pool so the category rails cover the catalog, not just the hero's 12
-  const { data: browseFamilies } = useFamilies({ limit: '100' })
+  const { data: browseData } = useFamilies({ limit: '100' })
+  const families = familyData?.families ?? []
+  const protocols = protocolData?.protocols ?? []
+  const featuredProtocols = featuredData?.protocols ?? []
   const embedded = isEmbedded()
 
   // Hero slides: featured protocols first; fall back to the latest protocol (or
@@ -49,7 +52,7 @@ export function HomePage() {
   // Group the browse pool by category (uncategorized last)
   const groupedFamilies = useMemo(() => {
     const groups = new Map<string, ModFamily[]>()
-    for (const f of browseFamilies ?? []) {
+    for (const f of browseData?.families ?? []) {
       const key = f.category && f.category !== 'None' && f.category !== 'null' ? f.category : 'Uncategorized'
       groups.set(key, [...(groups.get(key) ?? []), f])
     }
@@ -58,7 +61,7 @@ export function HomePage() {
       if (b[0] === 'Uncategorized') return -1
       return b[1].length - a[1].length || a[0].localeCompare(b[0])
     })
-  }, [browseFamilies])
+  }, [browseData])
 
   const heroThumb = heroSlide?.thumbnail_url && heroSlide.thumbnail_url !== 'None' ? heroSlide.thumbnail_url : null
 

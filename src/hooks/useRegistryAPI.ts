@@ -2,9 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import { apiGet } from '@/lib/api'
 import type {
   ModEntry,
-  ModFamily,
   FamilyDetail,
   ModFileDetail,
+  PaginatedFamilies,
+  PaginatedMods,
+  PaginatedProtocols,
   Protocol,
   ProtocolDetail,
   Screenshot,
@@ -14,14 +16,9 @@ import type {
 // ---- Mod families ----
 
 export function useFamilies(params?: { category?: string; limit?: string; offset?: string }) {
-  return useQuery<ModFamily[]>({
+  return useQuery<PaginatedFamilies>({
     queryKey: ['families', params],
-    queryFn: async () => {
-      const data = await apiGet<{ families: ModFamily[]; total: number; limit: number; offset: number }>(
-        '/api/families', params,
-      )
-      return data.families
-    },
+    queryFn: () => apiGet('/api/families', params),
   })
 }
 
@@ -44,7 +41,7 @@ export function useFamilyScreenshots(familyId: string) {
 // ---- Mods ----
 
 export function useMods(params?: { q?: string; category?: string; limit?: string; offset?: string }) {
-  return useQuery<ModEntry[]>({
+  return useQuery<PaginatedMods>({
     queryKey: ['mods', params],
     queryFn: () => apiGet('/api/mods', params),
   })
@@ -60,8 +57,15 @@ export function useModDetail(hash: string) {
 
 // ---- Protocols ----
 
-export function useProtocols(params?: { tag?: string; port?: string; iwad?: string; featured?: string }) {
-  return useQuery<Protocol[]>({
+export function useProtocols(params?: {
+  tag?: string
+  port?: string
+  iwad?: string
+  featured?: string
+  limit?: string
+  offset?: string
+}) {
+  return useQuery<PaginatedProtocols>({
     queryKey: ['protocols', params],
     queryFn: () => apiGet('/api/protocols', params),
   })

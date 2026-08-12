@@ -118,8 +118,22 @@ export interface SearchResult {
 
 // ---- API response wrappers ----
 
-export interface PaginatedResponse<T> {
-  data: T[]
+export interface PaginatedFamilies {
+  families: ModFamily[]
+  total: number
+  limit: number
+  offset: number
+}
+
+export interface PaginatedMods {
+  mods: ModEntry[]
+  total: number
+  limit: number
+  offset: number
+}
+
+export interface PaginatedProtocols {
+  protocols: Protocol[]
   total: number
   limit: number
   offset: number
