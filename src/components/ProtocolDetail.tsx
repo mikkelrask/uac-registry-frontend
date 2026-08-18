@@ -79,7 +79,7 @@ export function ProtocolDetailComponent() {
         <img
           src={data.thumbnail_url}
           alt={data.title}
-          className="w-full max-h-72 object-cover border border-border"
+          className="w-full aspect-video object-cover border border-border"
         />
       )}
 
@@ -92,7 +92,7 @@ export function ProtocolDetailComponent() {
           src={`https://www.youtube-nocookie.com/embed/${data.youtube_video_id}`}
           title="Protocol video"
           allowFullScreen
-          className="w-full aspect-video border border-border bg-black"
+          className="w-3/4 mx-auto aspect-video border border-border bg-black"
         />
       )}
 

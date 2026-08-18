@@ -83,13 +83,11 @@ export function ModFamilyDetail() {
         <img
           src={family.thumbnail_url}
           alt={family.name}
-          className="w-full max-h-72 object-cover border border-border"
+          className="w-full aspect-video object-cover border border-border"
         />
       )}
 
-      {family.description && (
-        <Markdown className="max-w-prose">{family.description}</Markdown>
-      )}
+      {family.description && <Markdown>{family.description}</Markdown>}
 
       {family.screenshots?.length ? <ScreenshotGallery screenshots={family.screenshots} /> : null}
 
