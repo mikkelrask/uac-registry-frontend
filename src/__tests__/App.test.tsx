@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from '@/App'
@@ -51,6 +51,36 @@ describe('App routing', () => {
     expect(storeLinks.length).toBeGreaterThanOrEqual(1)
     expect(modsLinks.length).toBeGreaterThanOrEqual(1)
     expect(protocolsLinks.length).toBeGreaterThanOrEqual(1)
+  })
+})
+
+describe('Latest Mods ordering', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
+  it('requests the home grid newest-first via sort=created_at', async () => {
+    const json = (body: unknown) =>
+      new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } })
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input)
+      if (url.includes('/api/families')) {
+        return json({ families: [], total: 0, limit: 12, offset: 0 })
+      }
+      return json({})
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    renderApp('/')
+    await waitFor(() => expect(fetchMock.mock.calls.length).toBeGreaterThan(0))
+
+    const urls = fetchMock.mock.calls.map((call) => String(call[0]))
+    // The "Latest Mods" grid fetches limit=12 — it must ask for newest first
+    const latestUrl = urls.find((u) => u.includes('/api/families') && u.includes('limit=12'))
+    expect(latestUrl).toBeDefined()
+    expect(new URL(latestUrl!).searchParams.get('sort')).toBe('created_at')
+    // The browse-by-category pool keeps the default alphabetical order
+    const browseUrl = urls.find((u) => u.includes('/api/families') && u.includes('limit=100'))
+    expect(browseUrl).toBeDefined()
+    expect(new URL(browseUrl!).searchParams.get('sort')).toBeNull()
   })
 })
 

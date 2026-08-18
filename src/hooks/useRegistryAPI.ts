@@ -15,7 +15,7 @@ import type {
 
 // ---- Mod families ----
 
-export function useFamilies(params?: { category?: string; limit?: string; offset?: string }) {
+export function useFamilies(params?: { category?: string; limit?: string; offset?: string; sort?: string }) {
   return useQuery<PaginatedFamilies>({
     queryKey: ['families', params],
     queryFn: () => apiGet('/api/families', params),

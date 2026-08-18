@@ -14,7 +14,8 @@ function isProtocolSlide(slide: Protocol | ModFamily): slide is Protocol {
 }
 
 export function HomePage() {
-  const { data: familyData, isLoading: loadingFamilies } = useFamilies({ limit: '12' })
+  // "Latest Mods" grid — newest families first
+  const { data: familyData, isLoading: loadingFamilies } = useFamilies({ limit: '12', sort: 'created_at' })
   const { data: protocolData, isLoading: loadingProtocols } = useProtocols()
   const { data: categories } = useCategories()
   // Featured-flagged protocols drive the hero carousel
