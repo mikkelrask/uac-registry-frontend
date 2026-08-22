@@ -150,7 +150,6 @@ export function ProtocolDetailComponent() {
 
       <div>
         <h2 className="storefront-section-title mb-4">
-          <Package className="size-5 text-accent-highlight" />
           Mods ({data.mods.length})
         </h2>
         {data.mods.length === 0 ? (
@@ -164,9 +163,9 @@ export function ProtocolDetailComponent() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5">
-                    {mod.mod_hash ? (
+                    {mod.family_id ? (
                       <Link
-                        to={`/mods/${mod.mod_hash}`}
+                        to={`/mods/${mod.family_id}`}
                         className="font-sans text-sm hover:text-accent-highlight transition-colors"
                       >
                         {mod.display_name}

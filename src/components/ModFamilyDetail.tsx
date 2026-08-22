@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, ExternalLink, Calendar, User, Globe as GlobeIcon, Package } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Calendar, User, Globe as GlobeIcon } from 'lucide-react'
 import { useFamilyDetail } from '@/hooks/useRegistryAPI'
 import { CategoryBadge } from '@/components/ui/badge'
 import { Markdown } from '@/components/Markdown'
@@ -95,7 +95,6 @@ export function ModFamilyDetail() {
 
       <div>
         <h2 className="storefront-section-title mb-4">
-          <Package className="size-5 text-accent-highlight" />
           Versions ({mods.length})
         </h2>
         {mods.length === 0 ? (

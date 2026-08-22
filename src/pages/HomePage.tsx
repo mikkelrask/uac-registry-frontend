@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useFamilies, useProtocols, useCategories } from '@/hooks/useRegistryAPI'
 import { ModCard } from '@/components/ModCard'
 import { ProtocolCard } from '@/components/ProtocolCard'
-import { Markdown } from '@/components/Markdown'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Package, Cpu, ChevronLeft, ChevronRight, Download, Monitor } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, Package, Search } from 'lucide-react'
 import { isEmbedded } from '@/lib/api'
+import { markdownExcerpt } from '@/lib/utils'
 import type { ModFamily, Protocol } from '@/lib/types'
 
 function isProtocolSlide(slide: Protocol | ModFamily): slide is Protocol {
@@ -38,11 +38,33 @@ export function HomePage() {
         ? [families[0]]
         : null
   const [heroIndex, setHeroIndex] = useState(0)
+  const [heroPaused, setHeroPaused] = useState(false)
   const heroCount = heroSlides?.length ?? 0
   const safeIndex = heroCount > 0 ? Math.min(heroIndex, heroCount - 1) : 0
   const heroSlide = heroSlides?.[safeIndex] ?? null
   const heroPrev = () => setHeroIndex((i) => (i - 1 + heroCount) % heroCount)
   const heroNext = () => setHeroIndex((i) => (i + 1) % heroCount)
+
+  // Autoplay: advance every 7s and loop. Restarts whenever the slide changes
+  // (auto or manual), so arrow/dot interaction resets the timer. Pauses on
+  // hover/focus and under prefers-reduced-motion.
+  useEffect(() => {
+    if (heroCount <= 1 || heroPaused) return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const id = setInterval(() => setHeroIndex((i) => (i + 1) % heroCount), 7000)
+    return () => clearInterval(id)
+  }, [heroCount, heroIndex, heroPaused])
+
+  // In embedded mode the app's own header has the search; this page-level
+  // band replaces the toolbar search so we don't stack two bars.
+  const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+    }
+  }
 
   // Featured item fallback: first family if no protocols exist at all
   const featuredFamily = families?.length ? families[0] : null
@@ -73,6 +95,10 @@ export function HomePage() {
         <section
           className="hero-container px-4 py-12 sm:py-16"
           tabIndex={heroCount > 1 ? 0 : undefined}
+          onMouseEnter={() => setHeroPaused(true)}
+          onMouseLeave={() => setHeroPaused(false)}
+          onFocus={() => setHeroPaused(true)}
+          onBlur={() => setHeroPaused(false)}
           onKeyDown={(e) => {
             if (heroCount <= 1) return
             if (e.key === 'ArrowLeft') {
@@ -96,7 +122,7 @@ export function HomePage() {
                 />
               ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-hsl(var(--uac-maroon)) to-hsl(var(--background))">
-                  <Monitor className="size-16 text-accent-highlight/30 mb-3" />
+                  <img src="/app-icon.png" alt="" className="size-16 opacity-30 mb-3" />
                   <span className="text-sm font-sans tracking-[0.3em] uppercase text-muted-foreground/40">
                     UAC Registry
                   </span>
@@ -147,7 +173,7 @@ export function HomePage() {
       {/* Empty state when no hero (embedded or no data) */}
       {!heroSlides && !embedded && (
         <section className="px-4 py-16 text-center">
-          <Monitor className="size-12 text-muted-foreground/30 mx-auto mb-4" />
+          <img src="/app-icon.png" alt="" className="size-12 opacity-30 mx-auto mb-4" />
           <h1 className="text-2xl font-sans tracking-[0.25em] uppercase text-foreground">
             UAC Registry
           </h1>
@@ -158,10 +184,27 @@ export function HomePage() {
       )}
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
+        {/* ── In-page search (embedded only) — below the featured hero so it
+               doesn't sit in the same band as the host app's own search bar ── */}
+        {embedded && (
+          <form
+            onSubmit={handleSearch}
+            className="flex items-center gap-2 bg-card border border-border px-3 py-2 focus-within:border-accent-highlight/50 transition-colors max-w-xl"
+          >
+            <Search className="size-4 text-muted-foreground shrink-0" />
+            <input
+              type="search"
+              placeholder="Search mods & protocols..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-transparent border-none outline-none text-sm text-foreground w-full placeholder:text-muted-foreground"
+            />
+          </form>
+        )}
+
         {/* ── Latest Mods — image-first grid ── */}
         <section>
           <div className="storefront-section-title">
-            <Package className="size-5 text-accent-highlight" />
             Latest Mods
             <Link
               to="/mods"
@@ -185,7 +228,7 @@ export function HomePage() {
             </div>
           ) : families?.length ? null : (
             <div className="border border-border bg-card/30 p-8 text-center">
-              <Package className="size-8 text-muted-foreground/30 mx-auto mb-3" />
+              <img src="/app-icon.png" alt="" className="size-8 opacity-30 mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">
                 No mods yet. Be the first to submit one through UAC Launch Control.
               </p>
@@ -198,7 +241,6 @@ export function HomePage() {
         {/* ── Featured Protocols ── */}
         <section>
           <div className="storefront-section-title">
-            <Cpu className="size-5 text-accent-highlight" />
             Featured Protocols
             <Link
               to="/protocols"
@@ -222,7 +264,7 @@ export function HomePage() {
             </div>
           ) : (
             <div className="border border-border bg-card/30 p-8 text-center">
-              <Cpu className="size-8 text-muted-foreground/30 mx-auto mb-3" />
+              <img src="/app-icon.png" alt="" className="size-8 opacity-30 mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">No protocols yet.</p>
             </div>
           )}
@@ -234,7 +276,6 @@ export function HomePage() {
             <div className="storefront-divider" />
             <section>
               <div className="storefront-section-title">
-                <Package className="size-5 text-accent-highlight" />
                 Browse by Category
               </div>
 
@@ -287,7 +328,9 @@ function HeroProtocolText({ protocol }: { protocol: Protocol }) {
         {protocol.title}
       </h1>
       {protocol.description ? (
-        <Markdown className="max-w-lg">{protocol.description}</Markdown>
+        <p className="text-sm text-muted-foreground max-w-lg leading-relaxed">
+          {markdownExcerpt(protocol.description, 220)}
+        </p>
       ) : (
         <p className="text-sm text-muted-foreground max-w-lg leading-relaxed">
           A curated launch protocol for UAC Launch Control.
@@ -324,7 +367,9 @@ function HeroFamilyText({ family }: { family: ModFamily }) {
         {family.name}
       </h1>
       {family.description ? (
-        <Markdown className="max-w-lg">{family.description}</Markdown>
+        <p className="text-sm text-muted-foreground max-w-lg leading-relaxed">
+          {markdownExcerpt(family.description, 220)}
+        </p>
       ) : (
         <p className="text-sm text-muted-foreground max-w-lg leading-relaxed">
           A community mod for UAC Launch Control.

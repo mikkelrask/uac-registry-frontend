@@ -62,6 +62,7 @@ export interface Screenshot {
 export interface ProtocolMod {
   id: string
   mod_hash: string | null
+  family_id: string | null
   display_name: string
   download_url: string
   version: string | null

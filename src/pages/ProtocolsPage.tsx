@@ -4,7 +4,6 @@ import { ProtocolCard } from '@/components/ProtocolCard'
 import { FilterPanel } from '@/components/FilterPanel'
 import { Pagination } from '@/components/Pagination'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Cpu } from 'lucide-react'
 
 const DEFAULT_LIMIT = 12
 const PAGE_SIZE_OPTIONS = [6, 12, 24, 48]
@@ -64,7 +63,6 @@ export function ProtocolsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
       <div className="storefront-section-title">
-        <Cpu className="size-5 text-accent-highlight" />
         Protocols
       </div>
 
@@ -92,7 +90,7 @@ export function ProtocolsPage() {
         </div>
       ) : (
         <div className="text-center py-16 border border-border bg-card/30">
-          <Cpu className="size-10 text-muted-foreground/30 mx-auto mb-3" />
+          <img src="/app-icon.png" alt="" className="size-10 opacity-30 mx-auto mb-3" />
           <p className="text-sm text-muted-foreground">
             {hasFilter ? 'No protocols match these filters.' : 'No protocols yet.'}
           </p>

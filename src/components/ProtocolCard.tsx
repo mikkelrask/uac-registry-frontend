@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-import { cn } from '@/lib/utils'
-import { Markdown } from '@/components/Markdown'
+import { cn, markdownExcerpt } from '@/lib/utils'
 import type { Protocol } from '@/lib/types'
 import { Cpu, Monitor, Globe, Download } from 'lucide-react'
 
@@ -91,7 +90,9 @@ export function ProtocolCard({ protocol }: { protocol: Protocol }) {
             {title}
           </h3>
           {protocol.description ? (
-            <Markdown className="text-[11px] line-clamp-2 leading-tight">{protocol.description}</Markdown>
+            <p className="text-[11px] text-muted-foreground leading-tight line-clamp-2">
+              {markdownExcerpt(protocol.description, 120)}
+            </p>
           ) : (
             <p className="text-[11px] text-muted-foreground line-clamp-2 leading-tight">
               A curated launch protocol
