@@ -171,7 +171,15 @@ export function UacLayout({ children }: { children: React.ReactNode }) {
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground space-y-2">
         <p>
           <span className="tracking-[0.25em] uppercase text-accent-highlight">UAC</span>{' '}
-          Registry &mdash; Community mods &amp; protocols for UAC Launch Control
+          Registry &mdash; Community mods &amp; protocols for{' '}
+          <a
+            href="https://uac-soft.online"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-highlight hover:underline"
+          >
+            UAC Launch Control
+          </a>
         </p>
         <p className="text-[10px] text-muted-foreground/60">
           &copy; {new Date().getFullYear()} UAC Registry. All mods and protocols are property of their respective authors.
