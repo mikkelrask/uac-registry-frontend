@@ -1,6 +1,7 @@
-import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, ExternalLink, Calendar, User, Globe as GlobeIcon } from 'lucide-react'
+import { useParams } from 'react-router-dom'
+import { ExternalLink, Calendar, User, Globe as GlobeIcon } from 'lucide-react'
 import { useFamilyDetail } from '@/hooks/useRegistryAPI'
+import { BackButton } from '@/components/BackButton'
 import { CategoryBadge } from '@/components/ui/badge'
 import { Markdown } from '@/components/Markdown'
 import { ScreenshotGallery } from '@/components/ScreenshotGallery'
@@ -27,9 +28,7 @@ export function ModFamilyDetail() {
       <div className="max-w-7xl mx-auto px-4 py-8 text-center">
         <div className="py-16 border border-border bg-card/30">
           <p className="text-muted-foreground">Family not found.</p>
-          <Link to="/mods" className="text-accent-highlight hover:underline text-sm mt-2 inline-block">
-            &larr; Back to mods
-          </Link>
+          <BackButton variant="inline" fallback="/mods">Back to mods</BackButton>
         </div>
       </div>
     )
@@ -40,10 +39,7 @@ export function ModFamilyDetail() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-      <Link to="/mods" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors font-sans tracking-wide">
-        <ArrowLeft className="size-3.5" />
-        Back to mods
-      </Link>
+      <BackButton fallback="/mods">Back to mods</BackButton>
 
       <div>
         <h1 className="font-sans text-2xl tracking-wide flex items-center gap-3">

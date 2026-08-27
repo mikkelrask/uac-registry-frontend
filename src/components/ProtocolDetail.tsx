@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Monitor, Globe, Tag, User, Calendar, Download, Package } from 'lucide-react'
+import { Monitor, Globe, Tag, User, Calendar, Download, Package } from 'lucide-react'
 import { useProtocolDetail } from '@/hooks/useRegistryAPI'
+import { BackButton } from '@/components/BackButton'
 import { Badge } from '@/components/ui/badge'
 import { Markdown } from '@/components/Markdown'
 import { Separator } from '@/components/ui/separator'
@@ -28,9 +29,7 @@ export function ProtocolDetailComponent() {
       <div className="max-w-7xl mx-auto px-4 py-8 text-center">
         <div className="py-16 border border-border bg-card/30">
           <p className="text-muted-foreground">Protocol not found.</p>
-          <Link to="/protocols" className="text-accent-highlight hover:underline text-sm mt-2 inline-block">
-            &larr; Back to protocols
-          </Link>
+          <BackButton variant="inline" fallback="/protocols">Back to protocols</BackButton>
         </div>
       </div>
     )
@@ -38,10 +37,7 @@ export function ProtocolDetailComponent() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-      <Link to="/protocols" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors font-sans tracking-wide">
-        <ArrowLeft className="size-3.5" />
-        Back to protocols
-      </Link>
+      <BackButton fallback="/protocols">Back to protocols</BackButton>
 
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>

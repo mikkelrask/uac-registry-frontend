@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, Download, ExternalLink, Globe, Package, Layers } from 'lucide-react'
+import { Calendar, Download, ExternalLink, Globe, Package, Layers } from 'lucide-react'
 import { useModDetail } from '@/hooks/useRegistryAPI'
+import { BackButton } from '@/components/BackButton'
 import { CategoryBadge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatDate } from '@/lib/utils'
@@ -22,9 +23,7 @@ export function ModFileDetail({ hash }: { hash: string }) {
       <div className="max-w-7xl mx-auto px-4 py-8 text-center">
         <div className="py-16 border border-border bg-card/30">
           <p className="text-muted-foreground">Mod file not found.</p>
-          <Link to="/mods" className="text-accent-highlight hover:underline text-sm mt-2 inline-block">
-            &larr; Back to mods
-          </Link>
+          <BackButton variant="inline" fallback="/mods">Back to mods</BackButton>
         </div>
       </div>
     )
@@ -34,10 +33,7 @@ export function ModFileDetail({ hash }: { hash: string }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-      <Link to="/mods" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors font-sans tracking-wide">
-        <ArrowLeft className="size-3.5" />
-        Back to mods
-      </Link>
+      <BackButton fallback="/mods">Back to mods</BackButton>
 
       <div>
         <h1 className="font-sans text-2xl tracking-wide flex items-center gap-3">
