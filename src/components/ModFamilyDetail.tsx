@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ExternalLink, Calendar, User, Globe as GlobeIcon } from 'lucide-react'
 import { useFamilyDetail } from '@/hooks/useRegistryAPI'
@@ -8,6 +9,67 @@ import { ScreenshotGallery } from '@/components/ScreenshotGallery'
 import { formatDate } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import type { ModEntry } from '@/lib/types'
+
+function ModFileRow({ mod }: { mod: ModEntry }) {
+  const urls = mod.urls ?? []
+  const [selected, setSelected] = useState(0)
+  // Guard against a stale index if the file's url list changes
+  const safeIndex = Math.min(selected, Math.max(urls.length - 1, 0))
+  const current = urls[safeIndex]
+
+  return (
+    <div className="flex items-center justify-between gap-3 p-3 border border-border bg-card/50 hover:border-accent-highlight/30 transition-colors">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-sans text-sm">{mod.display_name}</span>
+          {mod.category && <CategoryBadge category={mod.category} />}
+        </div>
+        {mod.approved_at && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Added {formatDate(mod.approved_at)}
+          </p>
+        )}
+      </div>
+
+      {urls.length > 1 ? (
+        <div className="flex items-center gap-2 shrink-0">
+          <select
+            value={safeIndex}
+            onChange={(e) => setSelected(Number(e.target.value))}
+            aria-label={`Download mirror for ${mod.display_name}`}
+            className="h-7 rounded-md border border-input bg-background px-1.5 text-xs text-foreground"
+          >
+            {urls.map((u, i) => (
+              <option key={u.url} value={i}>
+                {u.domain || u.url}
+              </option>
+            ))}
+          </select>
+          <a
+            href={current?.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-accent-highlight hover:underline flex items-center gap-1"
+          >
+            <ExternalLink className="size-3" />
+            {current?.domain}
+          </a>
+        </div>
+      ) : current ? (
+        <a
+          href={current.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-accent-highlight hover:underline flex items-center gap-1 shrink-0"
+        >
+          <ExternalLink className="size-3" />
+          {current.domain}
+        </a>
+      ) : null}
+    </div>
+  )
+}
 
 export function ModFamilyDetail() {
   const { familyName } = useParams<{ familyName: string }>()
@@ -36,6 +98,19 @@ export function ModFamilyDetail() {
 
   const family = data
   const mods = data.versions
+
+  // Group files by version, preserving the API order (newest approved first).
+  // Files without a version land in an "Unversioned" group.
+  const versionGroups: Array<[string, ModEntry[]]> = []
+  for (const mod of mods) {
+    const key = mod.version ?? ''
+    const group = versionGroups.find(([k]) => k === key)
+    if (group) {
+      group[1].push(mod)
+    } else {
+      versionGroups.push([key, [mod]])
+    }
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
@@ -91,45 +166,23 @@ export function ModFamilyDetail() {
 
       <div>
         <h2 className="storefront-section-title mb-4">
-          Versions ({mods.length})
+          Files ({mods.length})
         </h2>
         {mods.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No versions registered yet.</p>
+          <p className="text-sm text-muted-foreground">No files registered yet.</p>
         ) : (
-          <div className="space-y-2">
-            {mods.map((mod) => (
-              <div
-                key={mod.hash}
-                className="flex items-center justify-between p-3 border border-border bg-card/50 hover:border-accent-highlight/30 transition-colors"
-              >
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-sans text-sm">{mod.display_name}</span>
-                    {mod.version && (
-                      <span className="text-xs text-muted-foreground">v{mod.version}</span>
-                    )}
-                    {mod.category && <CategoryBadge category={mod.category} />}
-                  </div>
-                  {mod.approved_at && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Added {formatDate(mod.approved_at)}
-                    </p>
-                  )}
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  {mod.urls?.map((u) => (
-                    <a
-                      key={u.url}
-                      href={u.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-accent-highlight hover:underline flex items-center gap-1"
-                    >
-                      <ExternalLink className="size-3" />
-                      {u.domain}
-                    </a>
-                  ))}
-                </div>
+          <div className="space-y-5">
+            {versionGroups.map(([version, files]) => (
+              <div key={version} className="space-y-2">
+                <h3 className="text-sm font-sans tracking-wide text-muted-foreground">
+                  {version === '' ? 'Unversioned' : `v${version}`}
+                  <span className="text-muted-foreground/60">
+                    {' '}· {files.length} file{files.length === 1 ? '' : 's'}
+                  </span>
+                </h3>
+                {files.map((mod) => (
+                  <ModFileRow key={mod.hash} mod={mod} />
+                ))}
               </div>
             ))}
           </div>
