@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ExternalLink, Calendar, User, Globe as GlobeIcon } from 'lucide-react'
 import { useFamilyDetail } from '@/hooks/useRegistryAPI'
@@ -6,6 +5,7 @@ import { BackButton } from '@/components/BackButton'
 import { CategoryBadge } from '@/components/ui/badge'
 import { Markdown } from '@/components/Markdown'
 import { ScreenshotGallery } from '@/components/ScreenshotGallery'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatDate } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -13,10 +13,6 @@ import type { ModEntry } from '@/lib/types'
 
 function ModFileRow({ mod }: { mod: ModEntry }) {
   const urls = mod.urls ?? []
-  const [selected, setSelected] = useState(0)
-  // Guard against a stale index if the file's url list changes
-  const safeIndex = Math.min(selected, Math.max(urls.length - 1, 0))
-  const current = urls[safeIndex]
 
   return (
     <div className="flex items-center justify-between gap-3 p-3 border border-border bg-card/50 hover:border-accent-highlight/30 transition-colors">
@@ -32,40 +28,32 @@ function ModFileRow({ mod }: { mod: ModEntry }) {
         )}
       </div>
 
-      {urls.length > 1 ? (
-        <div className="flex items-center gap-2 shrink-0">
-          <select
-            value={safeIndex}
-            onChange={(e) => setSelected(Number(e.target.value))}
-            aria-label={`Download mirror for ${mod.display_name}`}
-            className="h-7 rounded-md border border-input bg-background px-1.5 text-xs text-foreground"
-          >
-            {urls.map((u, i) => (
-              <option key={u.url} value={i}>
-                {u.domain || u.url}
-              </option>
-            ))}
-          </select>
-          <a
-            href={current?.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-accent-highlight hover:underline flex items-center gap-1"
-          >
-            <ExternalLink className="size-3" />
-            {current?.domain}
-          </a>
-        </div>
-      ) : current ? (
+      {urls.length === 1 ? (
         <a
-          href={current.url}
+          href={urls[0].url}
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs text-accent-highlight hover:underline flex items-center gap-1 shrink-0"
         >
           <ExternalLink className="size-3" />
-          {current.domain}
+          {urls[0].domain}
         </a>
+      ) : urls.length > 1 ? (
+        <Select
+          onValueChange={(url) => window.open(url, '_blank', 'noopener,noreferrer')}
+        >
+          <SelectTrigger className="h-7 w-auto gap-1 px-2 text-xs text-muted-foreground hover:text-foreground border-border bg-card">
+            <ExternalLink className="size-3 text-accent-highlight shrink-0" />
+            <SelectValue placeholder="Downloads" />
+          </SelectTrigger>
+          <SelectContent className="border-border bg-popover text-popover-foreground">
+            {urls.map((u) => (
+              <SelectItem key={u.url} value={u.url} className="text-xs">
+                {u.domain || u.url}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       ) : null}
     </div>
   )
