@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { apiGet } from '@/lib/api'
 import type {
-  ModEntry,
+  ModFamily,
   FamilyDetail,
   ModFileDetail,
   PaginatedFamilies,
@@ -86,13 +86,13 @@ export function useSearch(q: string) {
     queryKey: ['search', q],
     queryFn: async () => {
       const data = await apiGet<{
-        mods: (ModEntry & { type: 'mod' })[]
+        families: (ModFamily & { type: 'family' })[]
         protocols: (Protocol & { type: 'protocol' })[]
-        total_mods: number
+        total_families: number
         total_protocols: number
       }>('/api/search', { q })
       return [
-        ...data.mods.map((m) => ({ type: 'mod' as const, mod: m })),
+        ...data.families.map((f) => ({ type: 'family' as const, family: f })),
         ...data.protocols.map((p) => ({ type: 'protocol' as const, protocol: p })),
       ]
     },

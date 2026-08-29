@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom'
 import { useSearch } from '@/hooks/useRegistryAPI'
-import { ModCardCompat } from '@/components/ModCard'
+import { ModCard } from '@/components/ModCard'
 import { ProtocolCard } from '@/components/ProtocolCard'
 import { SearchBar } from '@/components/SearchBar'
 import { Loader2 } from 'lucide-react'
@@ -43,8 +43,8 @@ export function SearchPage() {
       {data && data.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {data.map((result, i) => {
-            if (result.type === 'mod' && result.mod) {
-              return <ModCardCompat key={`mod-${i}`} mod={result.mod} />
+            if (result.type === 'family' && result.family) {
+              return <ModCard key={`family-${i}`} mod={result.family} />
             }
             if (result.type === 'protocol' && result.protocol) {
               return <ProtocolCard key={`protocol-${i}`} protocol={result.protocol} />

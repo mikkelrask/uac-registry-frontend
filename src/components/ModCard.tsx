@@ -95,37 +95,3 @@ export function ModCard({ mod }: { mod: ModFamily }) {
     </Link>
   )
 }
-
-/* ── Keep backward compat for old ModEntry-based usage ── */
-
-export function ModCardCompat({ mod }: { mod: { family_id?: string; family_name: string; display_name: string; category: string | null; version: string | null; approved_at?: number; hash: string; is_sidecar: number } }) {
-  const id = mod.family_id ?? mod.family_name
-  return (
-    <Link to={`/mods/${id}`} className="mod-grid-tile block group">
-      <div className={cn('absolute inset-0 tile-placeholder', getPlaceholderClass(mod.category))}>
-        <span className="opacity-20">{mod.display_name.slice(0, 3).toUpperCase()}</span>
-      </div>
-      <div className="tile-overlay">
-        {mod.category && (
-          <span className="absolute top-2 right-2 text-[10px] uppercase tracking-wider px-1.5 py-0.5 bg-black/60 text-accent-highlight border border-accent-highlight/30">
-            {mod.category}
-          </span>
-        )}
-        <div className="space-y-1">
-          <h3 className="font-sans text-sm tracking-wide text-foreground truncate">
-            {mod.display_name}
-          </h3>
-          <p className="text-[11px] text-muted-foreground truncate">
-            {mod.family_name}{mod.version ? ` · v${mod.version}` : ''}
-          </p>
-          <div className="tile-actions mt-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-sans tracking-wide text-accent-highlight bg-black/60 px-2.5 py-1 border border-accent-highlight/30 hover:border-accent-highlight/60 transition-colors">
-              <Download className="size-3" />
-              View Details
-            </span>
-          </div>
-        </div>
-      </div>
-    </Link>
-  )
-}

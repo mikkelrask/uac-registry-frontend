@@ -111,8 +111,7 @@ export interface ProtocolDetail extends Protocol {
 // ---- Search ----
 
 export interface SearchResult {
-  type: 'mod' | 'protocol'
-  mod?: ModEntry
+  type: 'family' | 'protocol'
   family?: ModFamily
   protocol?: Protocol
 }
