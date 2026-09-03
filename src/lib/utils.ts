@@ -14,6 +14,40 @@ export function formatDate(ts: number | null | undefined): string {
   })
 }
 
+// Tokenizes "1.0", "4.12.2", "v2.1b" into numeric and text segments.
+const tokenizeVersion = (v: string): Array<number | string> =>
+  (v.match(/\d+|[a-zA-Z]+/g) ?? []).map((t) => (/^\d+$/.test(t) ? Number(t) : t.toLowerCase()))
+
+// Compares version strings high-to-low with natural numeric ordering, so
+// "10.0" ranks above "9.1" (a plain string compare would invert that).
+// Versionless (empty) strings sort below any versioned string; equal
+// versions compare 0, leaving the caller's stable order intact.
+export function compareVersionsDesc(a: string, b: string): number {
+  if (a === b) return 0
+  const aEmpty = a.trim().length === 0
+  const bEmpty = b.trim().length === 0
+  if (aEmpty || bEmpty) return aEmpty === bEmpty ? 0 : aEmpty ? 1 : -1
+
+  const ta = tokenizeVersion(a)
+  const tb = tokenizeVersion(b)
+  const len = Math.min(ta.length, tb.length)
+  for (let i = 0; i < len; i++) {
+    const x = ta[i]
+    const y = tb[i]
+    if (typeof x === 'number' && typeof y === 'number') {
+      if (x !== y) return x > y ? -1 : 1
+    } else if (typeof x === 'string' && typeof y === 'string') {
+      if (x !== y) return x < y ? 1 : -1
+    } else {
+      // A numeric segment ranks above a text one at the same position.
+      return typeof x === 'number' ? -1 : 1
+    }
+  }
+  // Shared prefix is identical — the longer version ranks higher.
+  if (ta.length !== tb.length) return ta.length > tb.length ? -1 : 1
+  return 0
+}
+
 // Strips markdown formatting to plain text and truncates with an ellipsis.
 // Used for hero/card excerpts, where rendering full markdown (headings,
 // lists, code blocks) would overwhelm the layout.

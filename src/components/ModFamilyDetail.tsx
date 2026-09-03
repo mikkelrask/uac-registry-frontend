@@ -6,7 +6,7 @@ import { CategoryBadge } from '@/components/ui/badge'
 import { Markdown } from '@/components/Markdown'
 import { ScreenshotGallery } from '@/components/ScreenshotGallery'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { formatDate } from '@/lib/utils'
+import { formatDate, compareVersionsDesc } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { ModEntry } from '@/lib/types'
@@ -87,10 +87,17 @@ export function ModFamilyDetail() {
   const family = data
   const mods = data.versions
 
-  // Group files by version, preserving the API order (newest approved first).
+  // Sort files highest version first (natural numeric order: 10.0 > 9.1),
+  // not by when they were added to the registry. Equal versions keep the
+  // API order (newest approved first); versionless files land last.
+  const sortedMods = [...mods].sort((a, b) =>
+    compareVersionsDesc(a.version ?? '', b.version ?? ''),
+  )
+
+  // Group files by version, preserving the sorted order above.
   // Files without a version land in an "Unversioned" group.
   const versionGroups: Array<[string, ModEntry[]]> = []
-  for (const mod of mods) {
+  for (const mod of sortedMods) {
     const key = mod.version ?? ''
     const group = versionGroups.find(([k]) => k === key)
     if (group) {
