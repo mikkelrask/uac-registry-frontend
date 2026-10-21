@@ -60,10 +60,14 @@ export function ProtocolDetailComponent() {
               <Package className="size-3.5" />
               {data.mods.length} mod{data.mods.length !== 1 ? 's' : ''}
             </span>
+            <span className="flex items-center gap-1 text-sm text-muted-foreground">
+              <Download className="size-3.5" />
+              {data.download_count} downloads
+            </span>
           </div>
         </div>
         <button
-          onClick={() => installProtocol(data.protocol_json)}
+          onClick={() => void installProtocol(data.protocol_json, data.slug)}
           className="hero-cta shrink-0"
         >
           <Download className="size-4" />
@@ -183,7 +187,7 @@ export function ProtocolDetailComponent() {
                   </div>
                 </div>
                 <a
-                  href={mod.download_url}
+                  href={mod.mod_hash ? `${import.meta.env.VITE_API_BASE ?? 'https://db.uac-soft.online'}/api/downloads/mods/${mod.mod_hash}` : mod.download_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-accent-highlight hover:underline flex items-center gap-1 shrink-0"

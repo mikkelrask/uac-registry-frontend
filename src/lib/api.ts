@@ -27,7 +27,9 @@ export function isEmbedded(): boolean {
 
 // ---- Install handoff ----
 
-export function installProtocol(protocolJson: string): void {
+export async function installProtocol(protocolJson: string, slug: string): Promise<void> {
+  // Count the registry export before handing the protocol to the host app.
+  await fetch(`${API_BASE}/api/protocols/${encodeURIComponent(slug)}/download`, { method: 'POST' })
   if (isEmbedded()) {
     const msg: InstallMessage = { type: 'uac-install', protocolUrl: protocolJson }
     window.parent.postMessage(msg, '*')

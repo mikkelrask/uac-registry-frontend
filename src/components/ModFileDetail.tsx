@@ -63,6 +63,10 @@ export function ModFileDetail({ hash }: { hash: string }) {
             <Calendar className="size-3.5" />
             Added {formatDate(data.approved_at)}
           </span>
+          <span className="flex items-center gap-1 text-sm text-muted-foreground">
+            <Download className="size-3.5" />
+            {data.download_count} downloads
+          </span>
         </div>
       </div>
 
@@ -95,7 +99,7 @@ export function ModFileDetail({ hash }: { hash: string }) {
             {data.urls.map((u) => (
               <a
                 key={u.url}
-                href={u.url}
+                href={`${import.meta.env.VITE_API_BASE ?? 'https://db.uac-soft.online'}/api/downloads/mods/${hash}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hero-cta"

@@ -36,6 +36,7 @@ export interface ModFileDetail {
   version: string | null
   category: string | null
   is_sidecar: number
+  download_count: number
   load_order: Record<string, string>
   submitted_at: number
   approved_at: number
@@ -97,6 +98,7 @@ export interface Protocol {
   thumbnail_url: string | null
   youtube_video_id: string | null
   featured: number
+  download_count: number
   created_at: number
   updated_at: number
 }
