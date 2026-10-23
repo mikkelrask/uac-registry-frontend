@@ -272,25 +272,27 @@ export function HomePage() {
           )}
         </section>
 
-        {loadingPopular || popularMods.some((mod) => (mod.download_count ?? 0) > 0) ? (
-          <>
-            <div className="storefront-divider" />
-            <section>
-              <div className="storefront-section-title">Popular Mods</div>
-              {loadingPopular ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                  {[...Array(10)].map((_, i) => <Skeleton key={i} className="aspect-[16/10]" />)}
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                  {popularMods.filter((mod) => (mod.download_count ?? 0) > 0).slice(0, 10).map((mod) => (
-                    <ModCard key={mod.id} mod={mod} showDownloads />
-                  ))}
-                </div>
-              )}
-            </section>
-          </>
-        ) : null}
+        <>
+          <div className="storefront-divider" />
+          <section>
+            <div className="storefront-section-title">Popular Mods</div>
+            {loadingPopular ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                {[...Array(10)].map((_, i) => <Skeleton key={i} className="aspect-[16/10]" />)}
+              </div>
+            ) : popularMods.some((mod) => (mod.download_count ?? 0) > 0) ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                {popularMods.filter((mod) => (mod.download_count ?? 0) > 0).slice(0, 10).map((mod) => (
+                  <ModCard key={mod.id} mod={mod} showDownloads />
+                ))}
+              </div>
+            ) : (
+              <p className="border border-border bg-card/30 p-6 text-sm text-muted-foreground">
+                No mod downloads have been tracked yet. Download a registered mod to start the chart.
+              </p>
+            )}
+          </section>
+        </>
 
         {/* ── Browse by Category — chips + grouped rails ── */}
         {families && families.length > 0 && (
