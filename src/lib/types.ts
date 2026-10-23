@@ -2,6 +2,7 @@
 
 export interface ModEntry {
   hash: string
+  download_count?: number
   family_name: string
   family_id?: string
   display_name: string

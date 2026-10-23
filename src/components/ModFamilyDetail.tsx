@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
-import { ExternalLink, Calendar, User, Globe as GlobeIcon } from 'lucide-react'
+import { ExternalLink, Calendar, User, Globe as GlobeIcon, Download } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useFamilyDetail } from '@/hooks/useRegistryAPI'
 import { BackButton } from '@/components/BackButton'
 import { CategoryBadge } from '@/components/ui/badge'
@@ -11,6 +12,12 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { ModEntry } from '@/lib/types'
 
+const API_BASE = import.meta.env.VITE_API_BASE ?? 'https://db.uac-soft.online'
+
+function trackedDownloadUrl(hash: string, url: string) {
+  return `${API_BASE}/api/downloads/mods/${hash}?url=${encodeURIComponent(url)}`
+}
+
 function ModFileRow({ mod }: { mod: ModEntry }) {
   const urls = mod.urls ?? []
 
@@ -18,9 +25,14 @@ function ModFileRow({ mod }: { mod: ModEntry }) {
     <div className="flex items-center justify-between gap-3 p-3 border border-border bg-card/50 hover:border-accent-highlight/30 transition-colors">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-sans text-sm">{mod.display_name}</span>
+          <Link to={`/mods/${mod.hash}`} className="font-sans text-sm text-accent-highlight hover:underline">
+            {mod.display_name}
+          </Link>
           {mod.category && <CategoryBadge category={mod.category} />}
         </div>
+        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+          <Download className="size-3" /> {mod.download_count ?? 0} downloads · View file details
+        </p>
         {mod.approved_at && (
           <p className="text-xs text-muted-foreground mt-1">
             Added {formatDate(mod.approved_at)}
@@ -30,7 +42,7 @@ function ModFileRow({ mod }: { mod: ModEntry }) {
 
       {urls.length === 1 ? (
         <a
-          href={urls[0].url}
+          href={trackedDownloadUrl(mod.hash, urls[0].url)}
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs text-accent-highlight hover:underline flex items-center gap-1 shrink-0"
@@ -40,7 +52,7 @@ function ModFileRow({ mod }: { mod: ModEntry }) {
         </a>
       ) : urls.length > 1 ? (
         <Select
-          onValueChange={(url) => window.open(url, '_blank', 'noopener,noreferrer')}
+          onValueChange={(url) => window.open(trackedDownloadUrl(mod.hash, url), '_blank', 'noopener,noreferrer')}
         >
           <SelectTrigger className="h-7 w-auto gap-1 px-2 text-xs text-muted-foreground hover:text-foreground border-border bg-card">
             <ExternalLink className="size-3 text-accent-highlight shrink-0" />

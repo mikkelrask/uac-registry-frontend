@@ -99,7 +99,7 @@ export function ModFileDetail({ hash }: { hash: string }) {
             {data.urls.map((u) => (
               <a
                 key={u.url}
-                href={`${import.meta.env.VITE_API_BASE ?? 'https://db.uac-soft.online'}/api/downloads/mods/${hash}`}
+                href={`${import.meta.env.VITE_API_BASE ?? 'https://db.uac-soft.online'}/api/downloads/mods/${hash}?url=${encodeURIComponent(u.url)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hero-cta"

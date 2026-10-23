@@ -187,7 +187,7 @@ export function ProtocolDetailComponent() {
                   </div>
                 </div>
                 <a
-                  href={mod.mod_hash ? `${import.meta.env.VITE_API_BASE ?? 'https://db.uac-soft.online'}/api/downloads/mods/${mod.mod_hash}` : mod.download_url}
+                  href={mod.mod_hash ? `${import.meta.env.VITE_API_BASE ?? 'https://db.uac-soft.online'}/api/downloads/mods/${mod.mod_hash}?url=${encodeURIComponent(mod.download_url)}` : mod.download_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-accent-highlight hover:underline flex items-center gap-1 shrink-0"
