@@ -18,12 +18,14 @@ export function HomePage() {
   const { data: familyData, isLoading: loadingFamilies } = useFamilies({ limit: '12', sort: 'created_at' })
   const { data: protocolData, isLoading: loadingProtocols } = useProtocols()
   const { data: categories } = useCategories()
+  const { data: popularData, isLoading: loadingPopular } = useFamilies({ limit: '10', sort: 'popular' })
   // Featured-flagged protocols drive the hero carousel
   const { data: featuredData, isLoading: loadingFeatured } = useProtocols({ featured: '1' })
   // Bigger pool so the category rails cover the catalog, not just the hero's 12
   const { data: browseData } = useFamilies({ limit: '100' })
   const families = familyData?.families ?? []
   const protocols = protocolData?.protocols ?? []
+  const popularMods = popularData?.families ?? []
   const featuredProtocols = featuredData?.protocols ?? []
   const embedded = isEmbedded()
 
@@ -269,6 +271,26 @@ export function HomePage() {
             </div>
           )}
         </section>
+
+        {loadingPopular || popularMods.some((mod) => (mod.download_count ?? 0) > 0) ? (
+          <>
+            <div className="storefront-divider" />
+            <section>
+              <div className="storefront-section-title">Popular Mods</div>
+              {loadingPopular ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                  {[...Array(10)].map((_, i) => <Skeleton key={i} className="aspect-[16/10]" />)}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                  {popularMods.filter((mod) => (mod.download_count ?? 0) > 0).slice(0, 10).map((mod) => (
+                    <ModCard key={mod.id} mod={mod} showDownloads />
+                  ))}
+                </div>
+              )}
+            </section>
+          </>
+        ) : null}
 
         {/* ── Browse by Category — chips + grouped rails ── */}
         {families && families.length > 0 && (

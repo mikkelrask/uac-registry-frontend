@@ -24,7 +24,7 @@ function getPlaceholderClass(category: string | null | undefined): string {
   return CATEGORY_PLACEHOLDER_CLASSES[category.toLowerCase()] ?? 'tile-placeholder-utilities'
 }
 
-export function ModCard({ mod }: { mod: ModFamily }) {
+export function ModCard({ mod, showDownloads = false }: { mod: ModFamily; showDownloads?: boolean }) {
   const hasThumb = mod.thumbnail_url && mod.thumbnail_url !== 'None' && mod.thumbnail_url !== 'null'
   const placeholderClass = getPlaceholderClass(mod.category)
   const name = mod.name
@@ -70,11 +70,11 @@ export function ModCard({ mod }: { mod: ModFamily }) {
             </p>
           )}
 
-          {/* Meta row: mod count */}
+          {/* Meta row */}
           <div className="flex items-center gap-3 mt-1.5">
             <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-              <Package className="size-3" />
-              {mod.mod_count ?? 0}
+              {showDownloads ? <Download className="size-3" /> : <Package className="size-3" />}
+              {showDownloads ? `${mod.download_count ?? 0} downloads` : (mod.mod_count ?? 0)}
             </span>
             {mod.author && (
               <span className="text-[11px] text-muted-foreground truncate">

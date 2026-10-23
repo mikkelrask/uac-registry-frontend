@@ -27,6 +27,7 @@ export interface ModFamily {
   thumbnail_url?: string | null
   created_at?: number
   mod_count?: number
+  download_count?: number
 }
 
 // Single registered mod file (from worker /mod/:hash)
